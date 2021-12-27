@@ -40,8 +40,8 @@ class BaseFonts {
     return GoogleFonts.dmSans(color: color, fontWeight: FontWeight.w500, fontSize: 16);
   }
 
-  static TextStyle body({Color color = Colors.black, double fontSize: 16}) {
-    return GoogleFonts.dmSans(color: color, fontWeight: FontWeight.normal, fontSize: fontSize);
+  static TextStyle body({Color color = Colors.black, double fontSize = 15}) {
+    return GoogleFonts.dmSans(color: color, fontWeight: FontWeight.w500, fontSize: fontSize);
   }
 
   static TextStyle subHead({Color color = Colors.black}) {

@@ -12,6 +12,7 @@ class ActorSerializer extends DataSerializer<Actor> {
       description: data['description'],
       cost: data['cost'],
       isAvailable: data['isAvailable'],
+      id: id,
     );
   }
 

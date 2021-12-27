@@ -19,12 +19,12 @@ BorderRadius roundedBorderMedium = BorderRadius.circular(15);
 
 
 
-Widget loadingSpinner = Center(child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(BaseColors.mainColor), strokeWidth: 3,)),);
+Widget loadingSpinner = const Center(child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(BaseColors.mainColor), strokeWidth: 3,)),);
 
 Widget spacedDivider = Column(
   children: const <Widget>[
     verticalSpaceMedium,
-    const Divider(color: Colors.blueGrey, height: 5.0),
+    Divider(color: Colors.blueGrey, height: 5.0),
     verticalSpaceMedium,
   ],
 );

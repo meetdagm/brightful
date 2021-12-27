@@ -1,8 +1,8 @@
 import 'package:brightful/services/locator.dart';
 import 'package:brightful/services/navigation_service.dart';
+import 'package:brightful/ui/startup/startup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:brightful/ui/ActorCollectionPreview/actor_collection_preview.dart';
 
 
 void main() async {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
       ),
       navigatorKey: locator<NavigationService>().navigationKey,
-      home: const ActorCollectionPreview(),
+      home: const StartupView(),
     );
   }
 }
