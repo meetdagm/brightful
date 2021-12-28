@@ -17,11 +17,6 @@ class RosterViewModel extends FutureViewModel<Roster?> {
   @override
   Future<Roster?> futureToRun() => _rosterService.getRoster(handleError);
 
-  @override
-  onData(Roster? data) {
-    print("We've got the data");
-    super.onData(data);
-  }
 
   int get count {
     if (data == null) return 0;
@@ -30,8 +25,24 @@ class RosterViewModel extends FutureViewModel<Roster?> {
 
   handleError(String? error) {
     setBusy(false);
-    notifyListeners();
-    print('An error occured');
+    
+  }
+
+  selectedIndexAt({required int index}) async {
+    setBusy(true);
+    await _rosterService.remove(actor: data!.actors[index], onError: handleError, onSuccess: () {
+      setBusy(false);
+    });
+    
+    print('back from remove');
+  }
+
+  String titleAt({required int index}) {
+    return data!.actors[index].name;
+  }
+
+  String descriptionAt({required int index}) {
+    return '${data!.actors[index].cost}';
   }
 
 

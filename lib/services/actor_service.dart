@@ -20,7 +20,7 @@ class ActorService {
 
   final DatabaseService<Actor> _databaseService = DatabaseService(collectionID: DatabaseKeys.actors, serializer: ActorSerializer());
 
-  Stream<List<Actor>> get changes => _databaseService.listen();
+  Stream<List<Actor>> get notifyChanges => _databaseService.listen();
 
   add({required Actor model, required Function(String?) onError, required Function onSuccess}) async {
     await _databaseService.create(object: model, onError: onError, onSuccess: onSuccess);
@@ -29,7 +29,7 @@ class ActorService {
   toggleAvailabilityFor({required Actor model, required Function(String?) onError, required Function onSuccess}) async {
     var actorID = model.id;
     if (actorID == null) return;
-    await _databaseService.update(id: actorID, newValue: { 'isAvailable' : !model.isAvailable }, onError: onError, onSuccess: onSuccess);
+    return await _databaseService.update(id: actorID, newValue: { 'isAvailable' : !model.isAvailable }, onError: onError, onSuccess: onSuccess);
   }
 
 

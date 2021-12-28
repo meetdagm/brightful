@@ -1,10 +1,9 @@
 
-import 'package:brightful/helpers/database_keys.dart';
 import 'package:brightful/models/actor/actor.dart';
-import 'package:brightful/models/actor/actor_serializer.dart';
-import 'package:brightful/services/database_service.dart';
+import 'package:brightful/services/actor_service.dart';
 import 'package:brightful/services/locator.dart';
 import 'package:brightful/services/navigation_service.dart';
+import 'package:brightful/services/roster_service.dart';
 import 'package:brightful/ui/ActorCreate/create_actor_view.dart';
 import 'package:brightful/ui/roster/roster_view.dart';
 import 'package:intl/intl.dart';
@@ -15,12 +14,13 @@ import 'package:stacked/stacked.dart';
 class ActorCollectionPreviewModel extends StreamViewModel<List<Actor>> {
 
 
-  final DatabaseService<Actor> _actorDB = DatabaseService(collectionID: DatabaseKeys.actors, serializer: ActorSerializer());
   final NavigationService _navigationService = locator<NavigationService>();
+  final ActorService _actorService = ActorService();
+  final RosterService _rosterService = RosterService();
 
 
   @override
-  Stream<List<Actor>> get stream => _actorDB.listen();
+  Stream<List<Actor>> get stream => _actorService.notifyChanges;
 
   @override
   List<Actor>? get data {
@@ -49,13 +49,15 @@ class ActorCollectionPreviewModel extends StreamViewModel<List<Actor>> {
   }
 
   selectedItemAt({required int index}) async {
+
     setBusy(true);
     var object = data?[index];
-    if (object == null || object.id == null) return;
-    await _actorDB.update(id: object.id!, newValue: {'isAvailable': false }, onError: onError, onSuccess: () {
+    if (object == null) return;
+  
+    await _rosterService.add(actor: object, onError: onError, onSuccess: () {
       setBusy(false);
     });
-    setBusy(false);
+
   }
 
 
