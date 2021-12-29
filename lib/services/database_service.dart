@@ -19,9 +19,8 @@ class DatabaseService<T> {
   
 
   Stream<List<T>> listen({QueryBuilder? queryBuilder}) {
-    print("New Event");
+    
     (queryBuilder == null ? _collectionReference : queryBuilder.query)!.snapshots().listen((event) {
-      print("new event");
       List<T> objectCollection = List.from(event.docs.map((doc) => serializer.fromJson(id: doc.id, data: doc.data() as Map)));
       _streamController.add(objectCollection);
     });
