@@ -36,7 +36,6 @@ class RosterViewModel extends StreamViewModel<Roster?> {
   }
 
 
-
   selectedIndexAt({required int index}) async {
 
     setBusy(true);

@@ -23,8 +23,6 @@ class RosterService {
   Stream<Roster?> listenToChanges() => _databaseService.listenToDocumentWith(id: _rosterID);
   
   
-
-
   add({required Actor actor, required Function(String?) onError, required Function onSuccess}) async {
     
     

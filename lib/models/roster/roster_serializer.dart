@@ -1,9 +1,8 @@
 
 import 'package:brightful/helpers/database_keys.dart';
-import 'package:brightful/models/actor/actor.dart';
 import 'package:brightful/models/actor/actor_serializer.dart';
 import 'package:brightful/models/roster/roster.dart';
-import 'package:brightful/models/serializers/dataSerializers.dart';
+import 'package:brightful/models/serializers/serializer.dart';
 
 class RosterSerializer extends DataSerializer<Roster> {
 

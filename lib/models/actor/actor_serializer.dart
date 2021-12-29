@@ -1,7 +1,7 @@
 
 
 import 'package:brightful/models/actor/actor.dart';
-import 'package:brightful/models/serializers/dataSerializers.dart';
+import 'package:brightful/models/serializers/serializer.dart';
 
 class ActorSerializer extends DataSerializer<Actor> {
 

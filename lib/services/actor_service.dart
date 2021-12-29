@@ -21,11 +21,13 @@ class ActorService {
     queryBuilder.add(builder: (query) {
       return query.where('isAvailable', isEqualTo: true);
     });
-    
+
     return queryBuilder;
   }
 
-  Stream<List<Actor>> get notifyChanges => _databaseService.listen(queryBuilder: _queryBuilder);
+  Stream<List<Actor>> get notifyChanges {
+    return _databaseService.listen(queryBuilder: _queryBuilder);
+  } 
 
   add({required Actor model, required Function(String?) onError, required Function onSuccess}) async {
     await _databaseService.create(object: model, onError: onError, onSuccess: onSuccess);
