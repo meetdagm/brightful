@@ -19,6 +19,7 @@ class ActorSerializer extends DataSerializer<Actor> {
   @override
   Map<String, dynamic> toJson({required Actor object}) {
     return {
+      'id': object.id,
       'name': object.name,
       'description': object.description,
       'cost' : object.cost,

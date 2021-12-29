@@ -1,26 +1,34 @@
 
 
-import 'package:brightful/helpers/database_keys.dart';
+import 'dart:async';
+
 import 'package:brightful/models/roster/roster.dart';
-import 'package:brightful/models/roster/roster_serializer.dart';
-import 'package:brightful/services/auth_service.dart';
-import 'package:brightful/services/database_service.dart';
-import 'package:brightful/services/locator.dart';
 import 'package:brightful/services/roster_service.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
-class RosterViewModel extends FutureViewModel<Roster?> {
+class RosterViewModel extends StreamViewModel<Roster?> {
 
   
   final RosterService _rosterService = RosterService();
-  
+
   @override
-  Future<Roster?> futureToRun() => _rosterService.getRoster(handleError);
-
-
+  Stream<Roster?> get stream => _rosterService.listenToChanges();
+  
+  
+  
   int get count {
     if (data == null) return 0;
     return data!.actors.length;
+  }
+
+  int get _total {
+    if (data == null) return 0;
+    return data!.actors.fold(0, (previousValue, element) => previousValue + element.cost);
+  }
+
+  String get getTotal {
+   return _formatNumber(_total);
   }
 
   handleError(String? error) {
@@ -28,13 +36,15 @@ class RosterViewModel extends FutureViewModel<Roster?> {
     
   }
 
+
+
   selectedIndexAt({required int index}) async {
+
     setBusy(true);
     await _rosterService.remove(actor: data!.actors[index], onError: handleError, onSuccess: () {
       setBusy(false);
     });
     
-    print('back from remove');
   }
 
   String titleAt({required int index}) {
@@ -42,10 +52,14 @@ class RosterViewModel extends FutureViewModel<Roster?> {
   }
 
   String descriptionAt({required int index}) {
-    return '${data!.actors[index].cost}';
+    return _formatNumber(data!.actors[index].cost);
   }
 
 
+  String _formatNumber(int value) {
+    return NumberFormat.simpleCurrency(decimalDigits: 0).format(value);
+  }
 
+  
 
 }

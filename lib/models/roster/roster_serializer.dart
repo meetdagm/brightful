@@ -9,10 +9,8 @@ class RosterSerializer extends DataSerializer<Roster> {
 
   @override
   Roster fromJson({String? id, required Map data}) {
-    print('THis is data back ${data[DatabaseKeys.actors] as List}');
     return Roster(actors: List.from((data[DatabaseKeys.actors] as List).map((e){
-      print('This is an element: $e');
-      return ActorSerializer().fromJson(data: e);
+      return ActorSerializer().fromJson(id: e['id'], data: e);
     })));
   }
 

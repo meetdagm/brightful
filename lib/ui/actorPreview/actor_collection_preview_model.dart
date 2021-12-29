@@ -23,6 +23,12 @@ class ActorCollectionPreviewModel extends StreamViewModel<List<Actor>> {
   Stream<List<Actor>> get stream => _actorService.notifyChanges;
 
   @override
+  void onData(List<Actor>? data) {
+    data?.sort((a, b) => b.cost.compareTo(a.cost));
+    super.onData(data);
+  }
+
+  @override
   List<Actor>? get data {
     return super.data?.where((element) => element.isAvailable).toList();
   }
@@ -41,7 +47,7 @@ class ActorCollectionPreviewModel extends StreamViewModel<List<Actor>> {
 
   String subTitleForItemAt({required int index}) {
 
-    return NumberFormat.simpleCurrency().format(data![index].cost);
+    return NumberFormat.simpleCurrency(decimalDigits: 0).format(data![index].cost);
   }
 
   String descriptionForitemAt({required int index}) {
@@ -59,7 +65,6 @@ class ActorCollectionPreviewModel extends StreamViewModel<List<Actor>> {
     });
 
   }
-
 
   viewRoster() {
     _navigationService.navigateTo(const RosterView());

@@ -1,6 +1,4 @@
 
-
-
 import 'package:brightful/helpers/database_keys.dart';
 import 'package:brightful/models/actor/actor.dart';
 import 'package:brightful/models/actor/actor_serializer.dart';
@@ -13,28 +11,27 @@ import 'package:brightful/services/locator.dart';
 
 class RosterService {
 
-  /* 
-  This class handles the roster for a specific user.
-  By removing or adding a new actor to the user's roster.
-  
-  */
-
 
   final DatabaseService<Roster> _databaseService = DatabaseService(collectionID: "roster", serializer: RosterSerializer());
   final AuthService _authService = locator<AuthService>();
   final ActorService _actorService = ActorService();
+
+  String get _rosterID {
+    return _authService.currentUserID ?? "";
+  }
+
+  Stream<Roster?> listenToChanges() => _databaseService.listenToDocumentWith(id: _rosterID);
   
 
-  Future<Roster?> getRoster(Function(String?) onError) => _databaseService.read(id: _authService.currentUserID ?? '', onError: onError);
+  Future<Roster?> getRoster(Function(String?) onError) {
+    return _databaseService.read(id: _authService.currentUserID ?? '', onError: onError);
+  } 
   
 
 
   add({required Actor actor, required Function(String?) onError, required Function onSuccess}) async {
     
-    //We will be using the userID to look up the user's roster
-    var rosterID = _authService.currentUserID;
-    if (rosterID == null) return;
-
+    
     //We will then toggle the actors availability
     await _toggleAvailabilityFor(actor: actor, onError: onError, onSuccess: onSuccess);
 
@@ -43,7 +40,7 @@ class RosterService {
       
       //if the roster is available we will update the user's roster by adding the actor
       await _databaseService.appendToArray(
-        id: rosterID, 
+        id: _rosterID, 
         key: DatabaseKeys.actors, 
         value: [ActorSerializer().toJson(object: actor)], 
         onError: (error) => () async {
@@ -57,7 +54,7 @@ class RosterService {
 
     } else { //If the roster doesn't exist then we will go ahead and create the roster
       
-      await _databaseService.create(id: rosterID, object: Roster(actors: [actor]), onError: (error) => () async {
+      await _databaseService.create(id: _rosterID, object: Roster(actors: [actor]), onError: (error) => () async {
 
         //if an  error occurs than we have to toggle the availabilty back because we couldn't check for his availability
           await _toggleAvailabilityFor(actor: actor, onError: onError, onSuccess: onSuccess);
@@ -77,8 +74,11 @@ class RosterService {
     return await _databaseService.documentExists(id: _authService.currentUserID ?? "");
   }
 
-  remove({required Actor actor, required Function(String?) onError, required Function onSuccess}) async {
-    return await _toggleAvailabilityFor(actor: actor, onError: onError, onSuccess: onSuccess); 
+  Future remove({required Actor actor, required Function(String?) onError, required Function onSuccess}) async {
+
+    await _databaseService.removeFromArray(id: _rosterID, key: DatabaseKeys.actors, value: [ActorSerializer().toJson(object: actor)], onSuccess: onSuccess, onError: onError);
+    await _toggleAvailabilityFor(actor: actor, onError: onError, onSuccess: onSuccess);
+    
   }
 
   
