@@ -16,7 +16,6 @@ class RosterViewModel extends StreamViewModel<Roster?> {
   Stream<Roster?> get stream => _rosterService.listenToChanges();
   
   
-  
   int get count {
     if (data == null) return 0;
     return data!.actors.length;

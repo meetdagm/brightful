@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'package:brightful/models/serializers/dataSerializers.dart';
+import 'package:brightful/services/query_builder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService<T> {
@@ -17,9 +18,9 @@ class DatabaseService<T> {
   }
   
 
-  Stream<List<T>> listen() {
+  Stream<List<T>> listen({QueryBuilder? queryBuilder}) {
 
-    _collectionReference.snapshots().listen((event) {
+    (queryBuilder == null ? _collectionReference : queryBuilder.query)!.snapshots().listen((event) {
       List<T> objectCollection = List.from(event.docs.map((doc) => serializer.fromJson(id: doc.id, data: doc.data() as Map)));
       _streamController.add(objectCollection);
     });
@@ -37,7 +38,6 @@ class DatabaseService<T> {
     return _docStreamController.stream;
 
   }
-
 
 
   create({String? id, required T object, required Function(String) onError, required Function onSuccess}) async {

@@ -22,10 +22,6 @@ class RosterService {
 
   Stream<Roster?> listenToChanges() => _databaseService.listenToDocumentWith(id: _rosterID);
   
-
-  Future<Roster?> getRoster(Function(String?) onError) {
-    return _databaseService.read(id: _authService.currentUserID ?? '', onError: onError);
-  } 
   
 
 

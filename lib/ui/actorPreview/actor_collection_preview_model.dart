@@ -22,11 +22,11 @@ class ActorCollectionPreviewModel extends StreamViewModel<List<Actor>> {
   @override
   Stream<List<Actor>> get stream => _actorService.notifyChanges;
 
-  @override
-  void onData(List<Actor>? data) {
-    data?.sort((a, b) => b.cost.compareTo(a.cost));
-    super.onData(data);
-  }
+  // @override
+  // void onData(List<Actor>? data) {
+  //   // data?.sort((a, b) => b.cost.compareTo(a.cost));
+  //   super.onData(data);
+  // }
 
   @override
   List<Actor>? get data {
